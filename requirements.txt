@@ -1,0 +1,12 @@
+praw
+pyttsx3
+gTTS
+moviepy
+pydub
+google-api-python-client
+google-auth
+google-auth-oauthlib
+schedule
+mutagen
+numpy
+python-dotenv
