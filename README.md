@@ -33,15 +33,49 @@ project/
 
 ---
 
+## 🔧 Setup
+
+### 1. Replace the Placeholders
+
+In `main.py`, you will see several lines like this:
+
+```python
+REDDIT_CLIENT_ID = "your_client_id"
+REDDIT_CLIENT_SECRET = "your_client_secret"
+REDDIT_USER_AGENT = "your_user_agent"
+SUBREDDIT_NAME = "your_subreddit"
+```
+
+➡️ **You must replace** each placeholder string above with your actual values:
+
+- Create a Reddit app at https://www.reddit.com/prefs/apps
+- Copy your **Client ID**, **Client Secret**, and create a simple **User Agent** like `"RedditShortsBot/1.0"`
+- Set `SUBREDDIT_NAME` to the subreddit you want to pull posts from (e.g., `"AmItheAsshole"`)
+
+---
+
+### 2. YouTube API Credentials
+
+- Go to [Google Cloud Console](https://console.cloud.google.com/)
+- Create a project and enable the **YouTube Data API v3**
+- Go to **APIs & Services > Credentials**
+- Create an **OAuth 2.0 Client ID** (desktop app)
+- Download the `client_secrets.json` file
+- Place it in the root of your project folder
+
+> The first time you run the script, it will open a browser window to authenticate your Google account and upload videos on your behalf.
+
+---
+
 ## 🧰 Dependencies
 
-Install required packages:
+Install the required packages:
 
 ```bash
 pip install -r requirements.txt
 ```
 
-Your `requirements.txt` should contain:
+**`requirements.txt` should contain:**
 
 ```
 praw
@@ -57,89 +91,66 @@ mutagen
 numpy
 ```
 
-Additional Requirements:
+You also need:
 
-- **FFmpeg** (used by `moviepy`)
-- **ImageMagick** (required for `TextClip`)
-  - Update the path in `main.py`:
-
-```python
-from moviepy.config import change_settings
-
-change_settings({
-    "IMAGEMAGICK_BINARY": "C:\\Program Files\\ImageMagick-7.1.2-Q16-HDRI\\magick.exe"
-})
-```
-
----
-
-## 🔧 Setup
-
-### 1. Reddit API
-
-- Go to: https://www.reddit.com/prefs/apps
-- Create a new script-type application
-- Fill in the following in `main.py`:
-
-```python
-REDDIT_CLIENT_ID = "your_client_id"
-REDDIT_CLIENT_SECRET = "your_client_secret"
-REDDIT_USER_AGENT = "your_user_agent"
-SUBREDDIT_NAME = "your_target_subreddit"
-```
-
-### 2. YouTube API
-
-- Go to: https://console.cloud.google.com/
-- Create a new project
-- Enable **YouTube Data API v3**
-- Create OAuth 2.0 Client ID credentials
-- Download `client_secrets.json` and place it in your project folder
+- **FFmpeg**: used by `moviepy` to process video and audio
+- **ImageMagick**: required by `TextClip` to render text
+  - Be sure to update this path in `main.py`:
+    ```python
+    change_settings({
+        "IMAGEMAGICK_BINARY": "C:\\Program Files\\ImageMagick-7.1.2-Q16-HDRI\\magick.exe"
+    })
+    ```
 
 ---
 
 ## ▶️ Running the Bot
 
-Run manually:
+To run it once manually:
 
 ```bash
 python main.py
 ```
 
-The script is already set up to automatically run every 5 minutes using `schedule`.
+To keep it running (scheduled every 5 minutes):
 
----
-
-## 📝 Notes
-
-- Only fetches non-stickied, non-NSFW posts with text longer than 300 characters
-- Splits stories into multiple parts if necessary (max 5 parts)
-- Each video stays under 60 seconds for Shorts compatibility
-- Titles and hashtags are auto-formatted for YouTube Shorts
+- The bot uses `schedule` to run every 5 minutes
+- Keep the terminal open, or run it in the background (use `screen` or a background service if deploying)
 
 ---
 
 ## 📌 Example Output
 
-- **Title**: `AITA for refusing to go to my sister's wedding? (Part 1/2)`
-- **Description**:
+- Title: `AITA for refusing to go to my sister's wedding? (Part 1/2)`
+- Description:
   ```
   Part 1 of 2
-  
-  [Story content here...]
-  
+
+  [Story excerpt...]
+
   #shorts #reddit #aitah
   ```
-- **YouTube Link**: Uploaded automatically and printed to console
+- Uploaded to YouTube via authenticated account
 
 ---
 
 ## 🛠️ Troubleshooting
 
-- 🧪 Check `debug_logs/` to review processed stories
-- 🧼 Delete `youtube_token.pickle` if you need to re-authenticate YouTube
-- 🔁 Make sure background videos exist in `assets/` and match file names in the `BACKGROUND_FILES` list in `main.py`
-- ⚙️ Confirm `FFmpeg` and `ImageMagick` are installed and accessible
+- Make sure `client_secrets.json` exists
+- Ensure `ImageMagick` and `FFmpeg` are installed and added to your PATH
+- Delete `youtube_token.pickle` to re-authenticate
+- Check the `debug_logs/` folder if the bot says “no suitable posts found” or skips a story
+
+---
+
+## ⚠️ Security Note
+
+Do **not** share your personal credentials publicly. This includes:
+
+- Reddit client ID and secret
+- Google OAuth credentials
+- Your `.pickle` token file
+- YouTube access tokens
 
 ---
 
