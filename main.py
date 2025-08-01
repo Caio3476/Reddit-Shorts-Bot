@@ -544,12 +544,12 @@ def run_bot():
 if __name__ == "__main__":
     print("Reddit Shorts Bot started")
     print(f"Running in directory: {SCRIPT_DIR}")
-    print(f"Next run at: {datetime.datetime.now() + datetime.timedelta(minutes=30)}")
+    print(f"Next run at: {datetime.datetime.now() + datetime.timedelta(minutes=5)}")
     
     # Initial test run
     run_bot()
     
-    # Schedule every 30 minutes
+    # Schedule every 5 minutes
     schedule.every(5).minutes.do(run_bot)
     
     while True:
